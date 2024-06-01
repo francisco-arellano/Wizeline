@@ -1,0 +1,33 @@
+
+base:
+  repo_id: 938
+  random_seed: 42
+
+
+data_load:
+  features_data: "../data/raw/features.csv"
+  targets_data: "../data/raw/targets.csv"
+
+
+pre_process:
+  processed_num: "../data/processed/num_features.csv"
+  processed_cat: "../data/processed/cat_features.csv"
+  processed_targets: "../data/processed/targets.csv"
+  pipeline_features: "../data/pipeline/X.csv"
+  pipeline_targets: "../data/pipeline/y.csv"
+  
+model:
+  path: "../models/model.pkl"
+  x_train: "../data/separated/X_train.csv"
+  x_test: "../data/separated/X_test.csv"
+  y_train: "../data/separated/y_train.csv"
+  y_test: "../data/separated/y_test.csv"
+  penalty: "l2"
+  dual: False
+  tol: 0.0001
+  C: 1.0
+  fit_intercept: True
+  intercept_scaling: 1
+  solver: "lbfgs"
+  max_iter: 100
+  

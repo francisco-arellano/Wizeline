@@ -1,0 +1,106 @@
+schema: '2.0'
+stages:
+  load_data:
+    cmd: python data.py params.yaml
+    deps:
+    - path: data.py
+      hash: md5
+      md5: f7161f2f7cb1bb93b8f5335e1bb28038
+      size: 639
+    outs:
+    - path: ../data/raw/features.csv
+      hash: md5
+      md5: 839907947467e3cc8d9db45b9df482e6
+      size: 136921
+    - path: ../data/raw/targets.csv
+      hash: md5
+      md5: fb587c24d7488e903cef65192f710f97
+      size: 34012
+  pre_processing:
+    cmd: python preprocessing.py params.yaml
+    deps:
+    - path: ../data/raw/features.csv
+      hash: md5
+      md5: 839907947467e3cc8d9db45b9df482e6
+      size: 136921
+    - path: ../data/raw/targets.csv
+      hash: md5
+      md5: fb587c24d7488e903cef65192f710f97
+      size: 34012
+    - path: preprocessing.py
+      hash: md5
+      md5: 65a88c87805780be370432ef542d90d6
+      size: 7320
+    outs:
+    - path: ../data/pipeline/X.csv
+      hash: md5
+      md5: 141129afb420700d8641f11e89c2ba80
+      size: 734815
+    - path: ../data/pipeline/y.csv
+      hash: md5
+      md5: b2cff41b75d54a172478522a5d5351ab
+      size: 2339
+  train_model:
+    cmd: python model.py params.yaml
+    deps:
+    - path: ../data/pipeline/X.csv
+      hash: md5
+      md5: 141129afb420700d8641f11e89c2ba80
+      size: 734815
+    - path: ../data/pipeline/y.csv
+      hash: md5
+      md5: b2cff41b75d54a172478522a5d5351ab
+      size: 2339
+    - path: model.py
+      hash: md5
+      md5: dbdf9528ab3e41f585a7558c8153a027
+      size: 1758
+    outs:
+    - path: ../models/model.pkl
+      hash: md5
+      md5: 1389d7eebd9fa8794cc7571ed5f30766
+      size: 1967
+  evaluation:
+    cmd: python evaluation.py params.yaml
+    deps:
+    - path: ../tests/test_results.json
+      hash: md5
+      md5: 482f549b6eafe1bd04f461ce917fa55a
+      size: 265
+    - path: evaluation.py
+      hash: md5
+      md5: 9a181e4a130f715882be6c7f75d6a792
+      size: 1431
+    - path: run_tests.py
+      hash: md5
+      md5: 83b75e7655b1def0e557580f3f926125
+      size: 419
+    outs:
+    - path: ../metrics/evaluation_metrics.json
+      hash: md5
+      md5: 34a6bac7845c23ff4b8f8d7f6d67ab3d
+      size: 136
+  run_tests:
+    cmd: python run_tests.py
+    deps:
+    - path: ../models/model.pkl
+      hash: md5
+      md5: 1389d7eebd9fa8794cc7571ed5f30766
+      size: 1967
+    - path: run_tests.py
+      hash: md5
+      md5: 83b75e7655b1def0e557580f3f926125
+      size: 419
+    - path: test_metrics.py
+      hash: md5
+      md5: a1563532e1a35414741d64443d55d54a
+      size: 931
+    - path: test_pipeline.py
+      hash: md5
+      md5: b33cdc6f031354ad3f4cd47859b256ee
+      size: 1157
+    outs:
+    - path: ../tests/test_results.json
+      hash: md5
+      md5: 482f549b6eafe1bd04f461ce917fa55a
+      size: 265

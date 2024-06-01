@@ -1,0 +1,46 @@
+stages:
+  load_data:
+    cmd: python data.py params.yaml
+    deps:
+      - data.py
+    outs:
+      - ../data/raw/features.csv
+      - ../data/raw/targets.csv
+
+  pre_processing:
+    cmd: python preprocessing.py params.yaml
+    deps:
+      - preprocessing.py
+      - ../data/raw/features.csv
+      - ../data/raw/targets.csv
+    outs:
+      - ../data/pipeline/X.csv
+      - ../data/pipeline/y.csv
+
+  train_model:
+    cmd: python model.py params.yaml
+    deps:
+      - model.py
+      - ../data/pipeline/X.csv
+      - ../data/pipeline/y.csv
+    outs:
+      - ../models/model.pkl
+
+  run_tests:
+    cmd: python run_tests.py
+    deps:
+      - ../models/model.pkl
+      - run_tests.py
+      - test_metrics.py
+      - test_pipeline.py
+    outs:
+      - ../tests/test_results.json
+
+  evaluation:
+    cmd: python evaluation.py params.yaml
+    deps:
+      - ../tests/test_results.json
+      - run_tests.py
+      - evaluation.py
+    outs:
+      - ../metrics/evaluation_metrics.json
